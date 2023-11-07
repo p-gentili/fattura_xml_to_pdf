@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fattura_xml_to_pdf"
+version = "0.0.1"
+authors = [
+  { name="Paolo Gentili", email="gentilipaolo92@gmail.com" },
+]
+description = "A small utility to convert italian XML invoices to PDF."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "lxml",
+    "xhtml2pdf"
+]
+
+[project.scripts]
+fattura2pdf = "src.main:main"
+
+[project.urls]
+"Homepage" = "https://github.com/p-gentili/fattura_xml_to_pdf"
+"Bug Tracker" = "https://github.com/p-gentili/fattura_xml_to_pdf/issues"
+
+[tool.setuptools]
+packages = ["src"]
+
