@@ -28,7 +28,7 @@ def convert(xml_file: Path, xsl_file: Path):
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("xml")
-    parser.add_argument("--xsl", default="sdi", choices=["sdi"])
+    parser.add_argument("--xsl", default="sdi", choices=["sdi", "aruba"])
 
     args = parser.parse_args(argv)
     xsl_file = Path(os.path.dirname(__file__)) / f"styles/{args.xsl}.xsl"

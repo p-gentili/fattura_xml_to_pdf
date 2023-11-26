@@ -1,3 +1,5 @@
 # Fogli di stile
 - [SDI](https://www.fatturapa.gov.it/it/norme-e-regole/documentazione-fattura-elettronica/formato-fatturapa/)
     - [1.2.2](https://www.fatturapa.gov.it/export/documenti/fatturapa/v1.2.2/Foglio_di_stile_fattura_ordinaria_ver1.2.2.xsl)
+- Aruba
+    - [1.3](https://webmail.pec.it/fatturapa/xsl/aruba/fatturapa_vFPR12.xsl?_v_=1.3)
