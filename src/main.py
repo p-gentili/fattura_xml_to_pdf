@@ -1,19 +1,28 @@
 import argparse
 import os
-from lxml import etree
 from io import BytesIO
+from pathlib import Path
+
+import lxml.etree as ET
 from xhtml2pdf import pisa
 
 
-def convert(filename: str, xml_tree: bytes, xsl_root: bytes):
-    """Apply the style and convert to PDF."""
+def convert(xml_file: Path, xsl_file: Path):
+    """Apply the style and convert to HTML/PDF."""
 
-    transform = etree.XSLT(xsl_root)
-    result_tree = transform(xml_tree)
-    html_content = etree.tostring(result_tree)
+    dom = ET.parse(xml_file)
+    xslt = ET.parse(xsl_file)
 
-    with open(filename.replace("xml", "pdf"), "wb") as pdf_output:
-        pisa.CreatePDF(BytesIO(html_content), pdf_output)
+    transform = ET.XSLT(xslt)
+    newdom = transform(dom)
+
+    html_content = ET.tostring(newdom, pretty_print=True)
+
+    with open(f"{xml_file.stem}.html", "wb") as output:
+        output.write(html_content)
+
+    with open(f"{xml_file.stem}.pdf", "wb") as output:
+        pisa.CreatePDF(BytesIO(html_content), output)
 
 
 def main(argv=None):
@@ -22,19 +31,9 @@ def main(argv=None):
     parser.add_argument("--xsl", default="sdi", choices=["sdi"])
 
     args = parser.parse_args(argv)
+    xsl_file = Path(os.path.dirname(__file__)) / f"styles/{args.xsl}.xsl"
 
-    xsl_file = os.path.join(os.path.dirname(__file__), f"styles/{args.xsl}.xsl")
-
-    try:
-        with open(args.xml, "rb") as xml_input:
-            xml_tree = etree.parse(xml_input)
-
-        with open(xsl_file, "rb") as xsl_input:
-            xsl_root = etree.XML(xsl_input.read())
-    except FileNotFoundError as exc:
-        raise SystemExit("Cannot open input files.") from exc
-
-    convert(os.path.basename(args.xml), xml_tree, xsl_root)
+    convert(Path(args.xml), xsl_file)
 
 
 if __name__ == "__main__":
