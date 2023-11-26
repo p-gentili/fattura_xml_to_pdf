@@ -5,14 +5,14 @@ from io import BytesIO
 from xhtml2pdf import pisa
 
 
-def convert(xml_tree: bytes, xsl_root: bytes):
+def convert(filename: str, xml_tree: bytes, xsl_root: bytes):
     """Apply the style and convert to PDF."""
 
     transform = etree.XSLT(xsl_root)
     result_tree = transform(xml_tree)
     html_content = etree.tostring(result_tree)
 
-    with open("output.pdf", "wb") as pdf_output:
+    with open(filename.replace("xml", "pdf"), "wb") as pdf_output:
         pisa.CreatePDF(BytesIO(html_content), pdf_output)
 
 
@@ -34,7 +34,7 @@ def main(argv=None):
     except FileNotFoundError as exc:
         raise SystemExit("Cannot open input files.") from exc
 
-    convert(xml_tree, xsl_root)
+    convert(os.path.basename(args.xml), xml_tree, xsl_root)
 
 
 if __name__ == "__main__":
